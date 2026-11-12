@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NCC Digital Cadet System — Comprehensive Technical Documentation & Architecture Specification</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  @page {
+    size: A4;
+    margin: 18mm 14mm 18mm 14mm;
+    @bottom-center {
+      content: "Page " counter(page);
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      color: #64748b;
+    }
+    @top-right {
+      content: "NCC Digital Cadet System — Technical Documentation";
+      font-family: 'Inter', sans-serif;
+      font-size: 8pt;
+      color: #94a3b8;
+    }
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    background: #ffffff;
+    font-size: 9.5pt;
+    line-height: 1.55;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover-page {
+    page-break-after: always;
+    min-height: 98vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 20px 20px 20px;
+    background: linear-gradient(135deg, #0f2a4a 0%, #174675 60%, #1a568c 100%);
+    color: white;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover-top {
+    position: relative;
+    z-index: 2;
+  }
+
+  .cover-emblem {
+    font-size: 42pt;
+    margin-bottom: 12px;
+  }
+
+  .cover-tagline {
+    font-size: 11pt;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #f59e0b;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .cover-title {
+    font-size: 32pt;
+    font-weight: 800;
+    line-height: 1.15;
+    margin: 0 0 16px 0;
+    color: #ffffff;
+  }
+
+  .cover-subtitle {
+    font-size: 13pt;
+    color: #cbd5e1;
+    max-width: 650px;
+    line-height: 1.45;
+    font-weight: 400;
+  }
+
+  .cover-meta-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .meta-item {
+    font-size: 9pt;
+  }
+
+  .meta-item strong {
+    display: block;
+    color: #f59e0b;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+
+  .cover-footer {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8.5pt;
+    color: #94a3b8;
+  }
+
+  /* ── SECTION HEADINGS ── */
+  .section-break {
+    page-break-before: always;
+  }
+
+  h1.section-title {
+    font-size: 18pt;
+    font-weight: 800;
+    color: #174675;
+    border-bottom: 2.5px solid #174675;
+    padding-bottom: 6px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  h1.section-title .section-num {
+    background: #174675;
+    color: white;
+    font-size: 11pt;
+    padding: 3px 9px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #0f2a4a;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    border-left: 4px solid #f59e0b;
+    padding-left: 8px;
+  }
+
+  h3 {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #1e293b;
+    margin-top: 14px;
+    margin-bottom: 6px;
+  }
+
+  p {
+    margin: 0 0 10px 0;
+    color: #334155;
+  }
+
+  /* ── CARDS & CALLOUTS ── */
+  .card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    page-break-inside: avoid;
+  }
+
+  .card-header {
+    font-weight: 700;
+    font-size: 10.5pt;
+    color: #174675;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .alert {
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin: 10px 0;
+    font-size: 9pt;
+    page-break-inside: avoid;
+  }
+
+  .alert-info {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    color: #1e40af;
+  }
+
+  .alert-warning {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    color: #92400e;
+  }
+
+  .alert-success {
+    background: #f0fdf4;
+    border-left: 4px solid #22c55e;
+    color: #166534;
+  }
+
+  .alert-danger {
+    background: #fef2f2;
+    border-left: 4px solid #ef4444;
+    color: #991b1b;
+  }
+
+  /* ── TABLES ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 8.5pt;
+    page-break-inside: avoid;
+  }
+
+  th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+    text-align: left;
+    padding: 7px 9px;
+    border: 1px solid #cbd5e1;
+    font-size: 8.5pt;
+  }
+
+  td {
+    padding: 6px 9px;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 7.5pt;
+    font-weight: 700;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-amber { background: #fef3c7; color: #92400e; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-purple { background: #f3e8ff; color: #6b21a8; }
+  .badge-gray { background: #f1f5f9; color: #475569; }
+
+  /* ── CODE & TREE ── */
+  code {
+    font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+    font-size: 8pt;
+    background: #f1f5f9;
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: #0f172a;
+  }
+
+  pre {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', Consolas, Monaco, monospace;
+    font-size: 8pt;
+    line-height: 1.4;
+    overflow-x: auto;
+    page-break-inside: avoid;
+    margin: 10px 0;
+  }
+
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+
+  .tree {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    line-height: 1.45;
+    color: #1e293b;
+    page-break-inside: avoid;
+    white-space: pre;
+  }
+
+  /* ── LISTS ── */
+  ul, ol {
+    margin: 4px 0 10px 0;
+    padding-left: 20px;
+  }
+
+  li {
+    margin-bottom: 4px;
+    color: #334155;
+  }
+
+  /* ── DIAGRAMS (SVG containers) ── */
+  .diagram-container {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 14px;
+    margin: 14px 0;
+    text-align: center;
+    page-break-inside: avoid;
+  }
+
+  .diagram-caption {
+    font-size: 8pt;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================================================= -->
+<!-- COVER PAGE                                                                -->
+<!-- ========================================================================= -->
+<div class="cover-page">
+  <div class="cover-top">
+    <div class="cover-emblem">🇮🇳 🪖</div>
+    <div class="cover-tagline">National Cadet Corps — Digital Management Ecosystem</div>
+    <h1 class="cover-title">NCC Digital Cadet System</h1>
+    <div class="cover-subtitle">
+      Architectural Specification, Source Code Audit, Full-Stack Technical Documentation, and Production Deployment Guide
+    </div>
+  </div>
+
+  <div class="cover-meta-grid">
+    <div class="meta-item">
+      <strong>Document Type</strong>
+      Technical Architecture & System Specification
+    </div>
+    <div class="meta-item">
+      <strong>System Version</strong>
+      Release v1.0.0 (Unified Container Prototype)
+    </div>
+    <div class="meta-item">
+      <strong>Target Platform</strong>
+      Google Cloud Run / Render / Multi-Stage Docker
+    </div>
+    <div class="meta-item">
+      <strong>Repository</strong>
+      github.com/palemnarasimha07/new-repository
+    </div>
+    <div class="meta-item">
+      <strong>Audit Standard</strong>
+      Full-Stack Codebase Audit (Zero Invention / As-Built)
+    </div>
+    <div class="meta-item">
+      <strong>Generated Date</strong>
+      November 2026
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <span>CONFIDENTIAL & PROPRIETARY — PREPARED FOR ACADEMIC & INSTITUTIONAL EVALUATION</span>
+    <span>STATUS: DEPLOYED & AUDITED</span>
+  </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- 1. PROJECT OVERVIEW                                                       -->
+<!-- ========================================================================= -->
+<h1 class="section-title"><span class="section-num">01</span> Project Overview</h1>
+
+<h2>1.1 Project Title & Core Purpose</h2>
+<p>
+  The <strong>NCC Digital Cadet System</strong> is a cloud-native, full-stack enterprise web portal engineered to modernize, streamline, and digitize the operational lifecycle of the National Cadet Corps (NCC) across India. It serves as an integrated command, administration, and evaluation platform uniting three distinct user categories: <strong>Cadets</strong>, <strong>Associate NCC Officers (ANOs) / Unit Instructors</strong>, and <strong>Commanding Officers (COs) / Battalion Administrators</strong>.
+</p>
+
+<h2>1.2 Problem Statement</h2>
+<p>
+  Historically, NCC battalion and sub-unit management relies on physical ledgers, paper muster rolls, manual examination tabulation, and offline certificate distribution. This legacy paradigm suffers from severe institutional bottlenecks:
+</p>
+<ul>
+  <li><strong>Dispersed Paper Records:</strong> Drill sessions, physical training hours, and camp muster rolls (e.g. CATC, NIC, RDC) are logged on handwritten physical registers susceptible to moisture damage, ink decay, and catastrophic physical loss.</li>
+  <li><strong>Opaque Exam Preparedness:</strong> Cadets preparing for mandatory <em>'A'</em>, <em>'B'</em>, and <em>'C'</em> Certificate examinations have no transparent means to calculate their qualification eligibility (such as mandatory 75% parade attendance and camp requirements).</li>
+  <li><strong>Absence of Standardized Testing:</strong> Sub-units lack automated question banks, standardized difficulty rating engines, and computerized examination tools for defense syllabus subjects.</li>
+  <li><strong>Credential Forgery Vulnerability:</strong> Physical paper NCC certificates are vulnerable to unauthorized modification or reproduction, placing high manual verification workloads on universities, employers, and Services Selection Boards (SSB).</li>
+</ul>
+
+<h2>1.3 Objectives</h2>
+<ul>
+  <li><strong>End-to-End Lifecycle Digitization:</strong> Manage enrollment, demographic records, biometric/parade attendance, training schedules, examinations, and achievements in a unified cloud interface.</li>
+  <li><strong>Algorithmic Readiness Intelligence:</strong> Implement an automated, multi-factor Mathematical Readiness Engine that calculates an objective eligibility index (0–100%) for certificate examinations based on statutory attendance and camp completions.</li>
+  <li><strong>Objective Assessment & Analytics:</strong> Provide topic-categorized MCQ pools with difficulty classification (Easy, Medium, Hard), timer-enforced online mock tests, and batch performance analytics.</li>
+  <li><strong>Cryptographic & QR-Based Verification:</strong> Provide an open, zero-authentication public certificate verification portal (<code>/verify-certificate/:certNo</code>) allowing instant authentication via dynamic QR codes.</li>
+  <li><strong>Role-Based Administrative Accountability:</strong> Ensure strict separation of duties between Cadets, Officers, and Admins enforced via signed JSON Web Tokens (JWT) and immutable audit logging.</li>
+</ul>
+
+<h2>1.4 Target Users</h2>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 20%;">User Role</th>
+      <th style="width: 25%;">Target Audience</th>
+      <th>Key Operational Responsibilities & Capabilities</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="badge badge-green">Cadet</span></td>
+      <td>Enrolled youth across Army, Naval, and Air Wings</td>
+      <td>View digital ID card, monitor real-time parade attendance, track camp records, attempt mock assessments, view personalized readiness gap-analysis, download certificates.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-blue">Associate NCC Officer (ANO)</span></td>
+      <td>College & school professors commissioned as sub-unit commanders</td>
+      <td>Manage cadet roster, punch session attendance, schedule training activities, publish online exams, generate physical printable question papers with answer keys, review batch topic analytics.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-purple">Commanding Officer (Admin)</span></td>
+      <td>Regular Armed Forces Officers (Colonels / Lt Colonels)</td>
+      <td>Battalion-wide administrative oversight, unit readiness aggregations, inspect system audit trails, force security resets, and monitor directorate compliance.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-gray">Public / Verifier</span></td>
+      <td>Defense Recruiters (SSB), Universities, Employers</td>
+      <td>Public verification of certificate authenticity via serial number search or smartphone QR code scanning without system credentials.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>1.5 Complete Working Flow</h2>
+<div class="diagram-container">
+  <svg viewBox="0 0 850 140" style="width: 100%; max-height: 140px;" xmlns="http://www.w3.org/2000/svg">
+    <!-- Step 1 -->
+    <rect x="10" y="30" width="140" height="70" rx="8" fill="#174675" stroke="#0f2a4a" stroke-width="2"/>
+    <text x="80" y="60" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter">1. Onboarding</text>
+    <text x="80" y="80" fill="#cbd5e1" font-size="9" text-anchor="middle" font-family="Inter">ANO Enrolls Cadet</text>
+
+    <!-- Arrow 1 -->
+    <path d="M 150 65 L 180 65" stroke="#f59e0b" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+
+    <!-- Step 2 -->
+    <rect x="180" y="30" width="140" height="70" rx="8" fill="#174675" stroke="#0f2a4a" stroke-width="2"/>
+    <text x="250" y="60" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter">2. Parade & Training</text>
+    <text x="250" y="80" fill="#cbd5e1" font-size="9" text-anchor="middle" font-family="Inter">Session Punching</text>
+
+    <!-- Arrow 2 -->
+    <path d="M 320 65 L 350 65" stroke="#f59e0b" stroke-width="3" fill="none"/>
+
+    <!-- Step 3 -->
+    <rect x="350" y="30" width="140" height="70" rx="8" fill="#174675" stroke="#0f2a4a" stroke-width="2"/>
+    <text x="420" y="60" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter">3. Assessment</text>
+    <text x="420" y="80" fill="#cbd5e1" font-size="9" text-anchor="middle" font-family="Inter">CBT Exams & Papers</text>
+
+    <!-- Arrow 3 -->
+    <path d="M 490 65 L 520 65" stroke="#f59e0b" stroke-width="3" fill="none"/>
+
+    <!-- Step 4 -->
+    <rect x="520" y="30" width="140" height="70" rx="8" fill="#174675" stroke="#0f2a4a" stroke-width="2"/>
+    <text x="590" y="55" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter">4. Readiness Score</text>
+    <text x="590" y="75" fill="#cbd5e1" font-size="9" text-anchor="middle" font-family="Inter">Weighted Algorithm</text>
+    <text x="590" y="90" fill="#f59e0b" font-size="8.5" text-anchor="middle" font-family="Inter">Eligibility Check</text>
+
+    <!-- Arrow 4 -->
+    <path d="M 660 65 L 690 65" stroke="#f59e0b" stroke-width="3" fill="none"/>
+
+    <!-- Step 5 -->
+    <rect x="690" y="30" width="150" height="70" rx="8" fill="#166534" stroke="#14532d" stroke-width="2"/>
+    <text x="765" y="60" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter">5. Cert & QR Verify</text>
+    <text x="765" y="80" fill="#dcfce7" font-size="9" text-anchor="middle" font-family="Inter">Public Authenticity</text>
+  </svg>
+  <div class="diagram-caption">Figure 1.1: End-to-End Operational Workflow of NCC Digital Cadet System</div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- 2. COMPLETE FEATURES AND FUNCTIONALITIES                                  -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">02</span> Complete Features and Functionalities</h1>
+<p>
+  Every feature documented below represents verified, existing source code within the project.
+</p>
+
+<h2>2.1 Authentication & Role-Based Access Control</h2>
+<div class="card">
+  <div class="card-header">Feature: Multi-Portal Login & Session Management</div>
+  <p><strong>Purpose:</strong> Provide secure, role-segregated entry points for Cadets, Officers, and Administrators with session persistence.</p>
+  <p><strong>Access:</strong> All registered users.</p>
+  <p><strong>How it works:</strong> The login UI (<code>Login.jsx</code>) provides three role tabs (Cadet, ANO/Officer, CO/Admin). Submitting credentials issues a signed JWT token on the backend or validates against <code>localStorage</code> (<code>findCadetUser</code> in <code>AuthContext.jsx</code>). Successful login hydrates user state and redirects to role-specific dashboard (<code>/cadet/dashboard</code>, <code>/officer/dashboard</code>, or <code>/admin/dashboard</code>).</p>
+  <p><strong>Frontend Implementation:</strong> <code>frontend/src/pages/Login.jsx</code>, <code>frontend/src/context/AuthContext.jsx</code>.</p>
+  <p><strong>Backend Implementation:</strong> <code>POST /api/v1/auth/login</code> in <code>backend/server.js</code> with <code>bcrypt.compareSync</code> and <code>jwt.sign</code>.</p>
+  <p><strong>Database/Store:</strong> Validates against <code>usersDB</code> array (backend) and <code>nccCadets</code> / <code>STATIC_USERS</code> (client state).</p>
+</div>
+
+<div class="card">
+  <div class="card-header">Feature: Forced First-Time Password Change & Officer Password Reset</div>
+  <p><strong>Purpose:</strong> Enforce security hygiene by requiring cadets to set a secure password upon initial login and allow officers to reset forgotten passwords.</p>
+  <p><strong>Access:</strong> Cadets (self-change), Officers/Admins (reset cadet passwords).</p>
+  <p><strong>How it works:</strong> If a cadet record has <code>mustChangePassword === true</code>, the modal <code>ForcePasswordChangeModal.jsx</code> intercepts navigation until a new password (min 4 characters) is submitted. Officers can trigger <code>resetCadetPassword(cadetId)</code> in <code>CadetManagement.jsx</code>, which resets the credential to default and re-arms the forced-change flag.</p>
+  <p><strong>Frontend Implementation:</strong> <code>ForcePasswordChangeModal.jsx</code>, <code>AuthContext.jsx</code> (<code>changeCadetPassword</code>, <code>resetCadetPassword</code>).</p>
+  <p><strong>Backend Implementation:</strong> <code>POST /api/v1/auth/reset-password</code> with token verification.</p>
+  <p><strong>Database/Store:</strong> Updates <code>password</code> and <code>mustChangePassword</code> in <code>nccCadets</code> localStorage and <code>usersDB</code>.</p>
+</div>
+
+<h2>2.2 Cadet Portal Modules</h2>
+<div class="card">
+  <div class="card-header">Feature: Cadet Dashboard & Dynamic Readiness Dial</div>
+  <p><strong>Purpose:</strong> Provide enrolled cadets a central mission-control screen showing personal metrics, attendance dials, upcoming exams, urgent announcements, and eligibility gap-analysis.</p>
+  <p><strong>Access:</strong> Role: <code>cadet</code>.</p>
+  <p><strong>How it works:</strong> Renders a Recharts <code>RadialBarChart</code> showing drill attendance percentage. If attendance is under 75%, an immediate high-visibility <span class="badge badge-red">Attendance Risk Alert</span> banner is displayed. Embeds the <code>CadetReadinessCard</code> component detailing readiness percentage and breakdown across 5 weighted categories.</p>
+  <p><strong>Frontend Implementation:</strong> <code>frontend/src/pages/cadet/CadetDashboard.jsx</code>, <code>components/CadetReadinessCard.jsx</code>.</p>
+  <p><strong>Storage:</strong> Pulls from <code>nccTrainings</code>, <code>nccExams</code>, <code>nccAnnouncements</code>, <code>nccAchievements</code>, and <code>nccResults_${userId}</code>.</p>
+</div>
+
+<div class="card">
+  <div class="card-header">Feature: Algorithmic Cadet Readiness Index Engine</div>
+  <p><strong>Purpose:</strong> Mathematically calculate a transparent, objective 0–100% exam readiness score for certificate board examinations.</p>
+  <p><strong>Access:</strong> Cadets (self view), Officers (batch view via modals).</p>
+  <p><strong>How it works:</strong> Executes <code>calculateCadetReadiness()</code> in <code>readinessCalculator.js</code> with configurable weights: Attendance (20%), Training Completion (25%), Examination Marks (25%), Physical & Drill (15%), and Achievements & Camps (15%). Returns an overall score, category breakdown, status tier ("Outstanding Readiness", "Satisfactory Readiness", "Needs Improvement / At Risk"), and color codes.</p>
+  <p><strong>Implementation:</strong> <code>frontend/src/services/readinessCalculator.js</code>.</p>
+</div>
+
+<div class="card">
+  <div class="card-header">Feature: Computer-Based Testing (CBT) & Timed Mock Exam Engine</div>
+  <p><strong>Purpose:</strong> Allow cadets to take timer-enforced online exams with anti-cheating warnings, immediate grading, and question-by-question review.</p>
+  <p><strong>Access:</strong> Role: <code>cadet</code>.</p>
+  <p><strong>How it works:</strong> Loads published exams from <code>nccExams</code>. When started, a countdown timer (<code>Timer</code> component) begins. Cadets select MCQ options (A, B, C, D). Includes proctoring simulation UI (webcam placeholder, full-screen prompt, tab-switch warning count). Upon submit or timer expiry, computes marks, percentage, pass/fail status, saves response payload into <code>nccResults_${userId}</code>, and launches <code>AnswerReview</code> showing correct answers and explanations.</p>
+  <p><strong>Frontend Implementation:</strong> <code>frontend/src/pages/cadet/CadetExams.jsx</code>.</p>
+</div>
+
+<div class="card">
+  <div class="card-header">Feature: Weak Topic Detection & Personalized Recommendation Engine</div>
+  <p><strong>Purpose:</strong> Analyze historical exam mistakes to identify weak knowledge topics and suggest corrective study actions.</p>
+  <p><strong>Access:</strong> Role: <code>cadet</code>.</p>
+  <p><strong>How it works:</strong> <code>recommendationEngine.js</code> parses per-question topic answers across past tests. Topics scoring below 65% are flagged as <span class="badge badge-amber">Weak Topic</span>, generating targeted study cards (e.g. Map Reading, First Aid) and remedial recommendations.</p>
+  <p><strong>Frontend Implementation:</strong> <code>frontend/src/services/recommendationEngine.js</code>, invoked in <code>CadetDashboard.jsx</code>.</p>
+</div>
+
+<div class="card">
+  <div class="card-header">Feature: Cadet Profile, Attendance History, Achievements & Certificates</div>
+  <p><strong>Purpose:</strong> Complete self-service digital portfolio for cadets.</p>
+  <p><strong>Access:</strong> Role: <code>cadet</code>.</p>
+  <p><strong>How it works:</strong>
+    <ul>
+      <li><code>CadetProfile.jsx</code>: Digital ID Card with QR code, regiment number, wing, blood group, institution, and contact info.</li>
+      <li><code>CadetAttendance.jsx</code>: Session-by-session parade history with filters and percentage calculation.</li>
+      <li><code>CadetTraining.jsx</code>: View scheduled and completed training modules with drill/physical indicators.</li>
+      <li><code>CadetAchievements.jsx</code> & <code>CadetCertificates.jsx</code>: View verified medals, camp certificates, and download printable certificates.</li>
+    </ul>
+  </p>
+</div>
+
+<h2>2.3 Associate NCC Officer (ANO) Portal Modules</h2>
+<div class="card">
+  <div class="card-header">Feature: Cadet Enrollment & Roster Management</div>
+  <p><strong>Purpose:</strong> Complete CRUD lifecycle management for sub-unit cadet records.</p>
+  <p><strong>Access:</strong> Role: <code>officer</code>, <code>admin</code>.</p>
+  <p><strong>How it works:</strong> <code>CadetManagement.jsx</code> renders an interactive roster table with search by name/ID, filtering by Wing (Army, Naval, Air), and quick-stats (Total Cadets, Avg Attendance, Cadets Below 75%). Provides modal forms to enroll new cadets, edit existing profiles, delete records, view detailed performance dossiers, and trigger credential resets.</p>
+  <p><strong>Frontend Implementation:</strong> <code>frontend/src/pages/officer/CadetManagement.jsx</code>.</p>
+</div>
+
+<div class="card">
+  <div class="card-header">Feature: Examination Management, Question Bank & PDF Generator</div>
+  <p><strong>Purpose:</strong> Comprehensive examination suite allowing question bank authoring, automated test paper generation, PDF export, and batch analytics.</p>
+  <p><strong>Access:</strong> Role: <code>officer</code>, <code>admin</code>.</p>
+  <p><strong>How it works:</strong> In <code>ExaminationManagement.jsx</code> (1,742 LOC), officers can:
+    <ul>
+      <li>Manage Question Bank: Add, edit, and delete questions tagged with 10 NCC topics and 3 difficulty levels (Easy, Medium, Hard).</li>
+      <li>Dynamic Paper Generator: Automatically assemble balanced exam papers matching designated topic quotas and difficulty distributions.</li>
+      <li>Print & PDF Formatter: Generates formal, standard printable examination papers complete with confidential Answer Keys for physical invigilation.</li>
+      <li>AI Document Analysis: Upload PDF/TXT study manuals via <code>pdfParser.js</code>; parses syllabus keywords to extract matching curriculum topics.</li>
+      <li>Publish Exams: Configure duration, total marks, pass threshold, and push to cadet portal.</li>
+    </ul>
+  </p>
+  <p><strong>Frontend Implementation:</strong> <code>ExaminationManagement.jsx</code>, <code>services/pdfParser.js</code>, <code>services/examAnalyticsEngine.js</code>.</p>
+</div>
+
+<div class="card">
+  <div class="card-header">Feature: Parade Attendance Punching & Camp Management</div>
+  <p><strong>Purpose:</strong> Daily drill attendance logging and mandatory camp roster management.</p>
+  <p><strong>Access:</strong> Role: <code>officer</code>, <code>admin</code>.</p>
+  <p><strong>How it works:</strong>
+    <ul>
+      <li><code>AttendanceManagement.jsx</code>: Select drill session and batch-mark cadets as <em>Present</em>, <em>Absent</em>, or <em>Leave</em> with one-click full-present autofill. Automatically updates cadet attendance percentages.</li>
+      <li><code>CampManagement.jsx</code>: Schedule camps (CATC, NIC, BLC, RDC, EBSB), set location/dates, and enroll cadets to fulfill statutory certificate requirements.</li>
+    </ul>
+  </p>
+</div>
+
+<div class="card">
+  <div class="card-header">Feature: Batch Performance Analytics & Attention-Required Alerts</div>
+  <p><strong>Purpose:</strong> Unit-level diagnostic intelligence identifying lagging cadets and difficult syllabus topics.</p>
+  <p><strong>Access:</strong> Role: <code>officer</code>, <code>admin</code>.</p>
+  <p><strong>How it works:</strong>
+    <ul>
+      <li><code>examAnalyticsEngine.js</code>: Computes topic accuracy heatmaps, score variance, pass rates, and completion percentages.</li>
+      <li><code>AttentionRequiredWidget.jsx</code>: Proactively scans the roster and renders an alert widget on officer dashboards spotlighting cadets at risk due to attendance deficits (&lt;75%) or failing exam grades.</li>
+      <li><code>PerformanceAnalytics.jsx</code>: Multi-chart dashboard (Bar and Line charts) with CSV export of battalion academic summaries.</li>
+    </ul>
+  </p>
+</div>
+
+<h2>2.4 Commanding Officer (Admin) Portal & Security Modules</h2>
+<div class="card">
+  <div class="card-header">Feature: Battalion Executive Dashboard & Data Backup</div>
+  <p><strong>Purpose:</strong> High-level oversight for Battalion Commanders with database backup/restore tools.</p>
+  <p><strong>Access:</strong> Role: <code>admin</code>.</p>
+  <p><strong>How it works:</strong> <code>AdminDashboard.jsx</code> aggregates multi-unit statistics (cadet counts, wing distribution pie charts, monthly attendance lines, certificate issuance counts). Provides a Data Management console allowing administrators to export the entire application state as a JSON backup or restore/seed default datasets.</p>
+  <p><strong>Frontend Implementation:</strong> <code>frontend/src/pages/admin/AdminDashboard.jsx</code>.</p>
+</div>
+
+<div class="card">
+  <div class="card-header">Feature: Immutable System Audit Logging</div>
+  <p><strong>Purpose:</strong> Maintain a tamper-evident administrative audit trail for compliance and disciplinary tracking.</p>
+  <p><strong>Access:</strong> Role: <code>admin</code>.</p>
+  <p><strong>How it works:</strong> System actions (logins, logouts, exam creations, password changes, score modifications) trigger <code>logAuditAction()</code> in <code>api.js</code> or <code>logAudit()</code> in <code>server.js</code>. The backend stores entries in <code>auditLogsDB</code> with user identity, role, action, and timestamp. The <code>GET /api/v1/audit-logs</code> endpoint serves this log to authorized admins.</p>
+  <p><strong>Frontend & Backend:</strong> <code>backend/server.js</code> (lines 39-49, 85-87), <code>frontend/src/services/api.js</code>.</p>
+</div>
+
+<h2>2.5 Public Verification Module</h2>
+<div class="card">
+  <div class="card-header">Feature: Public Certificate & Document Verification Portal</div>
+  <p><strong>Purpose:</strong> Allow any external entity to verify official NCC credentials without an account.</p>
+  <p><strong>Access:</strong> Public (No authentication required).</p>
+  <p><strong>How it works:</strong> Hosted on <code>/verify-certificate</code> and <code>/verify-certificate/:certNo</code>. Users enter a certificate serial number (e.g. <code>NCC/CERT/2025/001</code>) or scan the certificate's dynamic QR code using a smartphone. The system validates the ID against verified records, displaying a green verified badge with cadet name, regiment ID, award date, certificate type, and remarks. If invalid, displays a red warning banner.</p>
+  <p><strong>Frontend Implementation:</strong> <code>frontend/src/pages/PublicCertificateVerify.jsx</code>, <code>qrcode.react</code>.</p>
+</div>
+
+<!-- ========================================================================= -->
+<!-- 3. FRONTEND TECHNOLOGIES                                                  -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">03</span> Frontend Technologies</h1>
+
+<p>
+  The frontend is built as a single-page application (SPA) optimized for fast loading and reactive state updates. Below is the audited technology manifest from <code>frontend/package.json</code>:
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 25%;">Package / Technology</th>
+      <th style="width: 15%;">Version</th>
+      <th>Architectural Role & Usage in Project</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>React</strong></td>
+      <td><code>^19.2.8</code></td>
+      <td>Core UI library for reactive component trees, virtual DOM diffing, and declarative UI.</td>
+    </tr>
+    <tr>
+      <td><strong>React DOM</strong></td>
+      <td><code>^19.2.8</code></td>
+      <td>DOM renderer for React web application.</td>
+    </tr>
+    <tr>
+      <td><strong>Vite</strong></td>
+      <td><code>^8.2.2</code></td>
+      <td>Next-generation frontend tooling providing rapid Hot Module Replacement (HMR) and optimized Rollup-based production bundling.</td>
+    </tr>
+    <tr>
+      <td><strong>React Router DOM</strong></td>
+      <td><code>^7.18.3</code></td>
+      <td>Declarative client-side routing, nested layouts, programmatic redirects, and role-based route protection guards (<code>ProtectedRoute</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>Lucide React</strong></td>
+      <td><code>^1.39.0</code></td>
+      <td>Clean, tree-shakeable SVG icon suite providing military and UI iconography across all portals.</td>
+    </tr>
+    <tr>
+      <td><strong>Recharts</strong></td>
+      <td><code>^3.10.1</code></td>
+      <td>SVG-based charting library used for attendance radial charts, batch score distribution bar charts, and battalion performance lines.</td>
+    </tr>
+    <tr>
+      <td><strong>QRCode.react</strong></td>
+      <td><code>^4.2.0</code></td>
+      <td>Dynamic SVG QR code generator used in Cadet ID cards and issued certificates for mobile scanning.</td>
+    </tr>
+    <tr>
+      <td><strong>PDF.js (pdfjs-dist)</strong></td>
+      <td><code>^6.3.289</code></td>
+      <td>Client-side PDF document parser used in <code>pdfParser.js</code> to extract text from defense training manuals.</td>
+    </tr>
+    <tr>
+      <td><strong>ESLint & Plugins</strong></td>
+      <td><code>^10.9.0</code></td>
+      <td>Code quality and React hooks linter.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>3.2 Styling & Design System</h2>
+<p>
+  The application utilizes a custom-engineered CSS design system defined in <code>frontend/src/App.css</code> and <code>frontend/src/index.css</code>. No heavy CSS framework (such as Tailwind or Bootstrap) is installed, eliminating stylesheet bloat.
+</p>
+<ul>
+  <li><strong>Color Palette:</strong> Navy Blue (<code>#174675</code> - Primary NCC), Defense Khaki/Gold (<code>#D97706</code>), Army Green (<code>#166534</code>), Air Force Sky (<code>#0369a1</code>), and Crimson (<code>#991b1b</code>).</li>
+  <li><strong>Layout Patterns:</strong> CSS Grid and Flexbox for responsive sidebar layouts, metrics cards, and exam question grids.</li>
+  <li><strong>Typography:</strong> System font stacks prioritizing Inter, Segoe UI, and -apple-system with clean hierarchy.</li>
+</ul>
+
+<h2>3.3 State Management & Data Hydration</h2>
+<p>
+  State is managed through a hybrid architecture:
+</p>
+<ul>
+  <li><strong>Authentication Context (<code>AuthContext.jsx</code>):</strong> Global React Context providing <code>user</code>, <code>login</code>, <code>logout</code>, <code>changeCadetPassword</code>, and role booleans (<code>isCadet</code>, <code>isOfficer</code>, <code>isAdmin</code>).</li>
+  <li><strong>Browser LocalStorage Persistence:</strong> <code>seedData.js</code> runs on initialization, populating default schemas for cadets, trainings, exams, announcements, and certificates. Component state synchronizes changes to localStorage on mutations.</li>
+  <li><strong>REST API Fallback Architecture (<code>api.js</code>):</strong> <code>apiRequest()</code> attempts communication with Express backend endpoints (<code>/api/v1/*</code>). If the backend is offline (such as in an offline evaluation demo), it gracefully falls back to local storage without throwing unhandled exceptions.</li>
+</ul>
+
+<!-- ========================================================================= -->
+<!-- 4. BACKEND TECHNOLOGIES                                                   -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">04</span> Backend Technologies</h1>
+
+<h2>4.1 Runtime & Framework Overview</h2>
+<p>
+  The backend service is located in <code>backend/server.js</code>, built on Node.js using modern ECMAScript Modules (<code>"type": "module"</code> in <code>package.json</code>).
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 25%;">Package / Dependency</th>
+      <th style="width: 15%;">Version</th>
+      <th>Function in Backend Architecture</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Node.js</strong></td>
+      <td>v24.x (v20 in Docker)</td>
+      <td>Asynchronous event-driven runtime environment.</td>
+    </tr>
+    <tr>
+      <td><strong>Express.js</strong></td>
+      <td><code>^4.21.2</code></td>
+      <td>Lightweight web application framework providing routing, middleware chaining, and HTTP request parsing.</td>
+    </tr>
+    <tr>
+      <td><strong>JSON Web Token (jsonwebtoken)</strong></td>
+      <td><code>^9.0.2</code></td>
+      <td>Cryptographic signing and verification of stateless authentication tokens with 12-hour expiration.</td>
+    </tr>
+    <tr>
+      <td><strong>Bcryptjs</strong></td>
+      <td><code>^2.4.3</code></td>
+      <td>One-way password hashing with salted rounds preventing credential exposure in storage.</td>
+    </tr>
+    <tr>
+      <td><strong>CORS (cors)</strong></td>
+      <td><code>^2.8.5</code></td>
+      <td>Cross-Origin Resource Sharing middleware configurable via <code>ALLOWED_ORIGINS</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>Dotenv (dotenv)</strong></td>
+      <td><code>^16.4.7</code></td>
+      <td>Loads environment variables from <code>backend/.env</code> into <code>process.env</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>4.2 Middleware Architecture</h2>
+<p>The backend incorporates modular middleware defined in <code>backend/middleware/auth.js</code>:</p>
+<ul>
+  <li><code>authenticateToken(req, res, next)</code>: Extracts the bearer token from the <code>Authorization: Bearer &lt;token&gt;</code> header. Verifies signature using <code>JWT_SECRET</code>. Rejects invalid or expired tokens with HTTP 401/403. Attaches decoded token payload (<code>req.user</code>) to the request object.</li>
+  <li><code>authorizeRoles(...roles)</code>: Higher-order authorization guard. Checks whether <code>req.user.role</code> matches allowed roles for the requested endpoint. Returns HTTP 403 Forbidden on role mismatch.</li>
+  <li><code>express.json()</code>: Parses incoming JSON request payloads up to standard body size limits.</li>
+  <li><code>Unified SPA Static Serving Middleware</code>: Custom middleware in <code>server.js</code> (lines 107–135) that inspects incoming requests. If the request does not start with <code>/api/</code>, it dynamically checks if <code>frontend/dist</code> exists and serves static assets, falling back to <code>dist/index.html</code> for client-side HTML5 pushState routing.</li>
+</ul>
+
+<!-- ========================================================================= -->
+<!-- 5. DATABASE DETAILS & DATA ARCHITECTURE                                   -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">05</span> Database Details & Data Architecture</h1>
+
+<div class="alert alert-warning">
+  <strong>Database Implementation Reality (As-Built):</strong> The current prototype utilizes an <strong>In-Memory Database Store</strong> in the Express backend (<code>usersDB</code>, <code>auditLogsDB</code>) combined with an extensive <strong>Client-Side LocalStorage Relational Model</strong> seeded via <code>seedData.js</code>. A dedicated persistent database server (e.g. PostgreSQL or MongoDB) is not yet wired into the backend.
+</div>
+
+<h2>5.1 Entity Schemas & Data Structures</h2>
+
+<h3>1. User Store (<code>usersDB</code> & <code>STATIC_USERS</code>)</h3>
+<table>
+  <thead>
+    <tr><th>Field</th><th>Type</th><th>Key</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>id</code></td><td>Integer</td><td>PK</td><td>Unique user identifier (e.g. 1, 2, 3)</td></tr>
+    <tr><td><code>username</code></td><td>String</td><td>Unique</td><td>Login username / Cadet ID (e.g. "NCC001", "ano", "co")</td></tr>
+    <tr><td><code>passwordHash</code> / <code>password</code></td><td>String</td><td>—</td><td>Bcrypt hashed password (backend) or demo string (frontend)</td></tr>
+    <tr><td><code>role</code></td><td>String</td><td>—</td><td>Access tier: <code>"cadet"</code>, <code>"officer"</code>, or <code>"admin"</code></td></tr>
+    <tr><td><code>name</code></td><td>String</td><td>—</td><td>Full name of user (e.g. "Rahul Kumar", "Lt. Pradeep Sharma")</td></tr>
+    <tr><td><code>rank</code></td><td>String</td><td>—</td><td>Military / Cadet rank (e.g. "Lieutenant", "Lance Corporal")</td></tr>
+    <tr><td><code>mustChangePassword</code></td><td>Boolean</td><td>—</td><td>Flag forcing password reset on first login</td></tr>
+  </tbody>
+</table>
+
+<h3>2. Cadet Collection (<code>nccCadets</code>)</h3>
+<table>
+  <thead>
+    <tr><th>Field</th><th>Type</th><th>Key</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>id</code></td><td>Integer</td><td>PK</td><td>Unique internal numeric ID</td></tr>
+    <tr><td><code>cadetId</code></td><td>String</td><td>Unique / Index</td><td>Official NCC Cadet Enrollment Number (e.g. "NCC001")</td></tr>
+    <tr><td><code>name</code></td><td>String</td><td>—</td><td>Cadet Full Name</td></tr>
+    <tr><td><code>rank</code></td><td>String</td><td>—</td><td>Current rank (Cadet, Corporal, Sergeant, SUO)</td></tr>
+    <tr><td><code>wing</code></td><td>String</td><td>—</td><td>Branch: <code>"Army Wing"</code>, <code>"Naval Wing"</code>, <code>"Air Wing"</code></td></tr>
+    <tr><td><code>unit</code></td><td>String</td><td>—</td><td>Sub-unit affiliation (e.g. "Unit A", "1 Karnataka Bn")</td></tr>
+    <tr><td><code>institution</code></td><td>String</td><td>—</td><td>Affiliated College / School</td></tr>
+    <tr><td><code>attendance</code></td><td>Number</td><td>—</td><td>Aggregated drill parade percentage (0–100%)</td></tr>
+    <tr><td><code>phone</code></td><td>String</td><td>—</td><td>Contact number (serves as default initial login password)</td></tr>
+    <tr><td><code>bloodGroup</code></td><td>String</td><td>—</td><td>Medical blood group (e.g. "B+", "O+")</td></tr>
+  </tbody>
+</table>
+
+<h3>3. Examination Collection (<code>nccExams</code>)</h3>
+<table>
+  <thead>
+    <tr><th>Field</th><th>Type</th><th>Key</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>id</code></td><td>Integer / String</td><td>PK</td><td>Unique Exam ID</td></tr>
+    <tr><td><code>title</code> / <code>examName</code></td><td>String</td><td>—</td><td>Exam Title (e.g. "NCC General Knowledge")</td></tr>
+    <tr><td><code>duration</code></td><td>Number</td><td>—</td><td>Timer limit in minutes (e.g. 20)</td></tr>
+    <tr><td><code>totalMarks</code></td><td>Number</td><td>—</td><td>Maximum score achievable</td></tr>
+    <tr><td><code>passMark</code></td><td>Number</td><td>—</td><td>Minimum score to pass</td></tr>
+    <tr><td><code>status</code></td><td>String</td><td>—</td><td><code>"draft"</code> or <code>"published"</code></td></tr>
+    <tr><td><code>questions</code></td><td>Array&lt;Object&gt;</td><td>FK</td><td>List of question objects with options, correct answer index, topic</td></tr>
+  </tbody>
+</table>
+
+<h3>4. Audit Log Collection (<code>auditLogsDB</code> / <code>nccAuditLogs</code>)</h3>
+<table>
+  <thead>
+    <tr><th>Field</th><th>Type</th><th>Key</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>id</code></td><td>Integer / String</td><td>PK</td><td>Timestamp-based unique record ID</td></tr>
+    <tr><td><code>user</code></td><td>String</td><td>—</td><td>Username of actor who performed the action</td></tr>
+    <tr><td><code>role</code></td><td>String</td><td>—</td><td>Role of actor (<code>"admin"</code>, <code>"officer"</code>, <code>"cadet"</code>)</td></tr>
+    <tr><td><code>action</code></td><td>String</td><td>—</td><td>Detailed description of transaction (e.g. "Exam Published: GK")</td></tr>
+    <tr><td><code>timestamp</code></td><td>String (ISO)</td><td>—</td><td>Localized date and time stamp</td></tr>
+  </tbody>
+</table>
+
+<!-- ========================================================================= -->
+<!-- 6. SYSTEM ARCHITECTURE                                                    -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">06</span> System Architecture</h1>
+
+<p>
+  The system utilizes a <strong>Unified Single-Container Architecture</strong> designed for high density, zero-cost cloud hosting, and rapid prototype deployment.
+</p>
+
+<div class="diagram-container">
+  <svg viewBox="0 0 850 260" style="width: 100%; max-height: 260px;" xmlns="http://www.w3.org/2000/svg">
+    <!-- Client Layer -->
+    <rect x="20" y="20" width="220" height="220" rx="8" fill="#f8fafc" stroke="#174675" stroke-width="2"/>
+    <text x="130" y="45" fill="#174675" font-size="12" font-weight="700" text-anchor="middle" font-family="Inter">Client Browser (SPA)</text>
+    <rect x="35" y="60" width="190" height="35" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="130" y="82" fill="#334155" font-size="9" text-anchor="middle" font-family="Inter">React 19 + Vite Router v7</text>
+    <rect x="35" y="105" width="190" height="35" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="130" y="127" fill="#334155" font-size="9" text-anchor="middle" font-family="Inter">Readiness Calculator Engine</text>
+    <rect x="35" y="150" width="190" height="35" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="130" y="172" fill="#334155" font-size="9" text-anchor="middle" font-family="Inter">Exam Analytics & PDF Parser</text>
+    <rect x="35" y="195" width="190" height="35" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="130" y="217" fill="#334155" font-size="9" text-anchor="middle" font-family="Inter">LocalStorage State Cache</text>
+
+    <!-- Communication Arrows -->
+    <path d="M 240 100 L 320 100" stroke="#f59e0b" stroke-width="2.5" fill="none"/>
+    <text x="280" y="90" fill="#f59e0b" font-size="8" font-weight="700" text-anchor="middle" font-family="Inter">HTTPS / JSON</text>
+    <path d="M 320 140 L 240 140" stroke="#174675" stroke-width="2.5" fill="none"/>
+    <text x="280" y="155" fill="#174675" font-size="8" font-weight="700" text-anchor="middle" font-family="Inter">Static Bundle</text>
+
+    <!-- Unified Container -->
+    <rect x="320" y="20" width="510" height="220" rx="8" fill="#f1f5f9" stroke="#0f2a4a" stroke-width="2"/>
+    <text x="575" y="45" fill="#0f2a4a" font-size="12" font-weight="700" text-anchor="middle" font-family="Inter">Unified Docker Container (Port 5000 / 8080)</text>
+
+    <!-- Static Server Sub-box -->
+    <rect x="340" y="65" width="220" height="155" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="450" y="85" fill="#174675" font-size="10" font-weight="700" text-anchor="middle" font-family="Inter">Express Static Asset Runner</text>
+    <text x="450" y="115" fill="#475569" font-size="8.5" text-anchor="middle" font-family="Inter">Serves compiled /frontend/dist</text>
+    <text x="450" y="135" fill="#475569" font-size="8.5" text-anchor="middle" font-family="Inter">HTML5 PushState Fallback (index.html)</text>
+    <text x="450" y="165" fill="#166534" font-size="8.5" font-weight="600" text-anchor="middle" font-family="Inter">Gzip Compressed Bundle Delivery</text>
+
+    <!-- API Server Sub-box -->
+    <rect x="580" y="65" width="230" height="155" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="695" y="85" fill="#174675" font-size="10" font-weight="700" text-anchor="middle" font-family="Inter">Express REST API Engine</text>
+    <text x="695" y="110" fill="#334155" font-size="8.5" text-anchor="middle" font-family="Inter">POST /api/v1/auth/login</text>
+    <text x="695" y="130" fill="#334155" font-size="8.5" text-anchor="middle" font-family="Inter">POST /api/v1/auth/reset-password</text>
+    <text x="695" y="150" fill="#334155" font-size="8.5" text-anchor="middle" font-family="Inter">GET /api/v1/audit-logs</text>
+    <text x="695" y="170" fill="#334155" font-size="8.5" text-anchor="middle" font-family="Inter">GET /api/v1/health</text>
+    <text x="695" y="200" fill="#7b1fa2" font-size="8" font-weight="700" text-anchor="middle" font-family="Inter">JWT Middleware + Bcrypt Verification</text>
+  </svg>
+  <div class="diagram-caption">Figure 6.1: High-Level Unified Single-Container Architecture Diagram</div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- 7. COMPLETE PROJECT FOLDER STRUCTURE                                      -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">07</span> Complete Project Folder Structure</h1>
+
+<div class="tree">ncc-digital-cadet-system/
+├── .dockerignore                          # Build exclusion rules for Docker engine
+├── .gitignore                             # Git source control ignore rules (node_modules, dist, env)
+├── DEPLOYMENT_GUIDE.md                    # Official Google Cloud Run step-by-step production guide
+├── Dockerfile                             # Multi-stage production container manifest
+├── package.json                           # Root convenience build and startup manifest
+├── README.md                              # Repository overview and documentation links
+│
+├── backend/                               # Express REST API Server
+│   ├── .env                               # Active backend environment variables (PORT, JWT_SECRET)
+│   ├── .env.example                       # Reference environment variable template
+│   ├── package.json                       # Backend dependencies (express, jsonwebtoken, bcryptjs, cors)
+│   ├── server.js                          # Main Express application, API routes & static runner
+│   └── middleware/
+│       └── auth.js                        # JWT authenticateToken and authorizeRoles guards
+│
+└── frontend/                              # React 19 Client SPA
+    ├── .env.example                       # Client environment template (VITE_API_BASE_URL)
+    ├── eslint.config.js                   # Linting rules configuration
+    ├── index.html                         # SPA root HTML template
+    ├── package.json                       # Client dependencies (react, lucide-react, recharts, qrcode)
+    ├── vite.config.js                     # Vite build and plugin configuration
+    ├── public/
+    │   ├── favicon.svg                    # Application browser icon
+    │   └── icons.svg                      # Static vector symbols
+    └── src/
+        ├── App.css                        # Core layout, sidebar, card, and utility styling
+        ├── index.css                      # Global baseline typography, reset, and CSS variables
+        ├── main.jsx                       # Application DOM bootstrap mounting point
+        ├── App.jsx                        # Root React component wrapping AppRoutes
+        │
+        ├── assets/                        # Static UI illustrations (hero.png, react.svg)
+        │
+        ├── components/                    # Reusable Presentation & Modal Components
+        │   ├── AttentionRequiredWidget.jsx # Proactive officer alert box for low-attendance cadets
+        │   ├── CadetPerformanceModal.jsx   # Detailed exam response review modal
+        │   ├── CadetReadinessCard.jsx      # Weighted readiness gauge with breakdown
+        │   ├── DemoModeBanner.jsx          # Offline SIH prototype indicator
+        │   ├── ExamReportModal.jsx         # Batch examination summary report modal
+        │   ├── ForcePasswordChangeModal.jsx # First-time mandatory password change prompt
+        │   ├── Navbar.jsx                  # Top navigation bar with active user profile & logout
+        │   └── Sidebar.jsx                 # Dynamic role-based navigation sidebar
+        │
+        ├── context/
+        │   └── AuthContext.jsx             # Authentication state, login/logout, password change logic
+        │
+        ├── layouts/
+        │   └── MainLayout.jsx              # Responsive shell wrapping Sidebar, Navbar, and outlet
+        │
+        ├── pages/
+        │   ├── Landing.jsx                 # Public portal landing page with feature cards
+        │   ├── Login.jsx                   # Role-tabbed login portal (Cadet, ANO, Admin)
+        │   ├── PublicCertificateVerify.jsx # Open QR & Certificate ID public verification page
+        │   │
+        │   ├── cadet/                      # Cadet Role Pages
+        │   │   ├── CadetAchievements.jsx   # Portfolio of medals, trophies, and awards
+        │   │   ├── CadetAttendance.jsx     # Drill attendance percentage & session ledger
+        │   │   ├── CadetCertificates.jsx   # Downloadable certificate repository
+        │   │   ├── CadetDashboard.jsx      # Central cadet overview & readiness card
+        │   │   ├── CadetExams.jsx          # Online CBT mock test taker & review
+        │   │   ├── CadetProfile.jsx        # Digital Cadet ID card & demographic info
+        │   │   └── CadetTraining.jsx       # Training timetable & syllabus view
+        │   │
+        │   ├── officer/                    # Associate NCC Officer (ANO) Pages
+        │   │   ├── AchievementsManagement.jsx # Record cadet awards & commendations
+        │   │   ├── Announcements.jsx       # Broadcast priority notices (Urgent, Important)
+        │   │   ├── AttendanceManagement.jsx # Batch parade attendance punching
+        │   │   ├── CadetManagement.jsx     # Master cadet enrollment & profile editor
+        │   │   ├── CampManagement.jsx      # Assign & track annual training camps
+        │   │   ├── CertificateManagement.jsx # Issue certificates with serial numbers
+        │   │   ├── ExaminationManagement.jsx # Question bank, dynamic paper generator & PDF print
+        │   │   ├── OfficerDashboard.jsx    # Unit status overview & rapid actions
+        │   │   ├── PerformanceAnalytics.jsx # Multi-chart score trends & CSV export
+        │   │   └── TrainingManagement.jsx  # Schedule drill and fieldcraft exercises
+        │   │
+        │   └── admin/
+        │       └── AdminDashboard.jsx      # Battalion executive overview & audit logs
+        │
+        ├── routes/
+        │   └── AppRoutes.jsx               # Route definitions with ProtectedRoute wrappers
+        │
+        ├── services/                       # Algorithmic Engines & API Clients
+        │   ├── api.js                      # Central fetch wrapper with offline fallback
+        │   ├── examAnalyticsEngine.js      # Topic accuracy heatmaps & score tier engine
+        │   ├── pdfParser.js                # PDF.js study material parser & keyword matcher
+        │   ├── readinessCalculator.js      # Multi-component readiness mathematical engine
+        │   └── recommendationEngine.js     # Weak-area detection & study recommendations
+        │
+        └── utils/
+            └── seedData.js                 # Initial demo dataset (cadets, questions, camps)</div>
+
+<!-- ========================================================================= -->
+<!-- 8. API DOCUMENTATION                                                      -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">08</span> API Documentation</h1>
+
+<div class="card">
+  <div class="card-header"><span class="badge badge-green">GET</span> <code>/api/v1/health</code></div>
+  <p><strong>Purpose:</strong> Service heartbeat monitoring and health checks for container orchestrators (Cloud Run / Render).</p>
+  <p><strong>Authentication:</strong> None (Public).</p>
+  <p><strong>Response (HTTP 200 OK):</strong></p>
+  <pre><code>{
+  "status": "OK",
+  "service": "NCC Digital Cadet Backend API",
+  "timestamp": "2026-11-12T09:15:30.123Z"
+}</code></pre>
+</div>
+
+<div class="card">
+  <div class="card-header"><span class="badge badge-blue">POST</span> <code>/api/v1/auth/login</code></div>
+  <p><strong>Purpose:</strong> Authenticate user credentials against role, returning a signed JWT token.</p>
+  <p><strong>Authentication:</strong> None (Public login endpoint).</p>
+  <p><strong>Request Body:</strong></p>
+  <pre><code>{
+  "username": "ano",
+  "password": "1234",
+  "portalRole": "officer"
+}</code></pre>
+  <p><strong>Response (HTTP 200 OK):</strong></p>
+  <pre><code>{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 2,
+    "username": "ano",
+    "role": "officer",
+    "name": "Lt. Pradeep Sharma",
+    "rank": "Lieutenant"
+  }
+}</code></pre>
+  <p><strong>Error Responses:</strong></p>
+  <ul>
+    <li><code>HTTP 400 Bad Request:</code> <code>{"error": "Username and password required"}</code></li>
+    <li><code>HTTP 401 Unauthorized:</code> <code>{"error": "Invalid credentials"}</code></li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="card-header"><span class="badge badge-blue">POST</span> <code>/api/v1/auth/reset-password</code></div>
+  <p><strong>Purpose:</strong> Update user password and re-hash via bcrypt.</p>
+  <p><strong>Authentication:</strong> Required (<code>Authorization: Bearer &lt;token&gt;</code>).</p>
+  <p><strong>Request Body:</strong></p>
+  <pre><code>{
+  "newPassword": "newSecurePassword2026"
+}</code></pre>
+  <p><strong>Response (HTTP 200 OK):</strong> <code>{"message": "Password updated successfully"}</code></p>
+  <p><strong>Error Responses:</strong></p>
+  <ul>
+    <li><code>HTTP 400 Bad Request:</code> <code>{"error": "Password must be at least 4 characters long"}</code></li>
+    <li><code>HTTP 401 Unauthorized:</code> <code>{"error": "Access token required"}</code></li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="card-header"><span class="badge badge-green">GET</span> <code>/api/v1/audit-logs</code></div>
+  <p><strong>Purpose:</strong> Retrieve chronological security and administrative audit trail.</p>
+  <p><strong>Authentication:</strong> Required (<code>Authorization: Bearer &lt;token&gt;</code>). <strong>Authorized Role:</strong> <code>admin</code> only.</p>
+  <p><strong>Response (HTTP 200 OK):</strong></p>
+  <pre><code>{
+  "logs": [
+    {
+      "id": 1794411090123,
+      "user": "ano",
+      "role": "officer",
+      "action": "Exam Published: NCC General Knowledge",
+      "timestamp": "2026-11-12T09:12:00.000Z"
+    }
+  ]
+}</code></pre>
+</div>
+
+<!-- ========================================================================= -->
+<!-- 9. SECURITY IMPLEMENTATION                                                -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">09</span> Security Implementation</h1>
+
+<h2>9.1 Actually Implemented Security Controls</h2>
+<ul>
+  <li><strong>Cryptographic Password Hashing:</strong> Passwords in backend stores are processed with <code>bcryptjs</code> using 8 salt rounds, preventing plaintext credential leakage.</li>
+  <li><strong>Stateless JWT Token Issuance:</strong> Tokens signed with HMAC-SHA256 (<code>HS256</code>) using server-side secret <code>JWT_SECRET</code>, configured with a 12-hour expiration window.</li>
+  <li><strong>Role-Based Access Control (RBAC):</strong> Route-level middleware (<code>authorizeRoles("admin")</code>) and React Router protection wrappers (<code>ProtectedRoute</code>) strictly segregate access boundaries between Cadets, Officers, and Admins.</li>
+  <li><strong>Forced Password Hygiene:</strong> Cadets initialized with default phone credentials are compelled to establish custom passwords on first login via <code>mustChangePassword</code> gating.</li>
+  <li><strong>CORS Whitelisting:</strong> Cross-Origin Resource Sharing is controlled in Express via the <code>ALLOWED_ORIGINS</code> environment configuration.</li>
+  <li><strong>Security Audit Logging:</strong> Sensitive events (logins, password modifications, exam publishing) generate structured audit entries recorded with actor identities and timestamps.</li>
+</ul>
+
+<h2>9.2 Known Security Limitations & Missing Controls</h2>
+<div class="alert alert-danger">
+  <strong>Identified Production Security Deficits (To Address in Next Release):</strong>
+  <ol>
+    <li><strong>Rate Limiting Missing:</strong> No request throttling (e.g. <code>express-rate-limit</code>) exists on <code>/api/v1/auth/login</code>, rendering the endpoint susceptible to brute-force attacks.</li>
+    <li><strong>Missing HTTP Security Headers:</strong> The application does not integrate <code>helmet</code> to set Content Security Policy (CSP), Strict-Transport-Security (HSTS), or X-Frame-Options headers.</li>
+    <li><strong>Client-Side Demo State Vulnerability:</strong> Sensitive cadet data stored in browser <code>localStorage</code> is unencrypted and accessible via DevTools or Cross-Site Scripting (XSS).</li>
+    <li><strong>Ephemeral Backend Store:</strong> In-memory user credentials and audit logs are reset whenever the container restarts.</li>
+  </ol>
+</div>
+
+<!-- ========================================================================= -->
+<!-- 10. INSTALLATION AND LOCAL EXECUTION                                      -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">10</span> Installation and Local Execution</h1>
+
+<h2>10.1 Prerequisites</h2>
+<ul>
+  <li>Node.js (version 18.0.0 or higher recommended; project verified on v24.19.0).</li>
+  <li>npm (version 9.0.0 or higher).</li>
+  <li>Git (version 2.x+).</li>
+</ul>
+
+<h2>10.2 Step-by-Step Execution Commands</h2>
+
+<h3>Step 1: Clone Repository & Install Dependencies</h3>
+<pre><code># Clone the project repository
+git clone https://github.com/palemnarasimha07/new-repository.git
+cd new-repository
+
+# Install backend dependencies
+cd backend
+npm install
+
+# Install frontend dependencies
+cd ../frontend
+npm install</code></pre>
+
+<h3>Step 2: Configure Environment Variables</h3>
+<pre><code># In backend/.env
+PORT=5000
+NODE_ENV=development
+JWT_SECRET=ncc_digital_cadet_system_sih2026_super_secret_jwt_key
+ALLOWED_ORIGINS=*
+
+# In frontend/.env (optional for dev)
+VITE_API_BASE_URL=/api/v1</code></pre>
+
+<h3>Step 3: Launch Local Servers</h3>
+<pre><code># Method A: Unified Production Server (Recommended)
+# Builds the React bundle and serves fullstack on Port 5000:
+npm run build --prefix frontend
+node backend/server.js
+# Access application at: http://localhost:5000
+
+# Method B: Independent Development Mode
+# Terminal 1: Backend API
+cd backend && npm run dev
+
+# Terminal 2: Vite Hot-Reload Frontend
+cd frontend && npm run dev
+# Access Vite dev server at: http://localhost:5173</code></pre>
+
+<!-- ========================================================================= -->
+<!-- 11. DEPLOYMENT ARCHITECTURE                                               -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">11</span> Deployment Architecture</h1>
+
+<h2>11.1 Multi-Stage Production Dockerfile</h2>
+<p>
+  The project is containerized using a clean two-stage Docker architecture defined in <code>Dockerfile</code>:
+</p>
+<pre><code># Stage 1: Build React Frontend SPA
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Express Backend + Static Assets Runner
+FROM node:20-alpine AS runner
+ENV NODE_ENV=production
+ENV PORT=8080
+WORKDIR /app/backend
+COPY backend/package*.json ./
+RUN npm ci --only=production
+COPY backend/ ./
+COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
+EXPOSE 8080
+CMD ["node", "server.js"]</code></pre>
+
+<h2>11.2 Supported Cloud Hosting Providers</h2>
+<table>
+  <thead>
+    <tr>
+      <th style="width: 25%;">Hosting Provider</th>
+      <th style="width: 20%;">Deployment Method</th>
+      <th>Configuration & Environmental Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Google Cloud Run</strong></td>
+      <td>Serverless Container (<code>gcloud run deploy</code>)</td>
+      <td>Auto-scales container from 0 to N instances. Managed HTTPS. Reads <code>PORT</code> automatically (defaults to 8080). Documented in <code>DEPLOYMENT_GUIDE.md</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>Render.com</strong></td>
+      <td>Web Service (Docker Runtime)</td>
+      <td>Connected to GitHub repository <code>palemnarasimha07/new-repository</code>. Auto-detects <code>Dockerfile</code>. Free tier 24/7 web hosting.</td>
+    </tr>
+    <tr>
+      <td><strong>LocalTunnel</strong></td>
+      <td>Zero-Config Public Tunnel</td>
+      <td>Instant public demonstration bridge running against local port 5000 (<code>npx localtunnel --port 5000</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ========================================================================= -->
+<!-- 12. TESTING, PERFORMANCE & SCALABILITY                                    -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">12</span> Testing, Performance & Scalability</h1>
+
+<h2>12.1 Testing Status (As-Built)</h2>
+<ul>
+  <li><strong>Functional Verification:</strong> Complete manual integration testing across Cadet, ANO, and Admin user flows. Verified login authentication, exam countdown timers, result tabulation, and QR code rendering.</li>
+  <li><strong>API Health Verification:</strong> Tested programmatic health checks via <code>GET /api/v1/health</code> and credential validation with node fetch scripts.</li>
+  <li><strong>Build Pipeline Verification:</strong> Vite build compiles 2,437 modules into production chunks in 2.88 seconds.</li>
+  <li><strong>Missing Automated Tests:</strong> No automated unit testing harness (such as Vitest or Jest) or End-to-End browser test suite (such as Playwright or Cypress) is currently present in the repository.</li>
+</ul>
+
+<h2>12.2 Performance Optimizations Implemented</h2>
+<ul>
+  <li><strong>Rollup Chunk Optimization:</strong> Production assets are minified and compressed with Gzip, resulting in a 263 KB core JavaScript payload.</li>
+  <li><strong>Client-Side Local Storage Hydration:</strong> Near-zero latency on data reads and dashboard metrics since records are cached locally.</li>
+  <li><strong>Lightweight Container Footprint:</strong> Alpine Linux container base image reduces the container size to under 180 MB.</li>
+</ul>
+
+<!-- ========================================================================= -->
+<!-- 13. FUTURE ENHANCEMENTS                                                   -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">13</span> Future Enhancements</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 22%;">Phase</th>
+      <th style="width: 28%;">Proposed Enhancement</th>
+      <th>Architectural Description & Institutional Impact</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="badge badge-blue">Phase 1</span></td>
+      <td>Persistent PostgreSQL Database</td>
+      <td>Replace backend in-memory arrays and client localStorage with a hosted relational database (e.g. Supabase / Neon) using Prisma ORM.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-blue">Phase 1</span></td>
+      <td>Rate Limiting & Security Hardening</td>
+      <td>Integrate <code>express-rate-limit</code> and <code>helmet</code> middleware to protect auth endpoints against brute-force attacks and injection.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-amber">Phase 2</span></td>
+      <td>DG NCC National Server Bridge</td>
+      <td>Implement secure REST / GraphQL integration with the Directorate General NCC headquarters in New Delhi for pan-India cadet synchronization.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-amber">Phase 2</span></td>
+      <td>Mobile Biometric Parade Sync</td>
+      <td>Develop a React Native / PWA mobile client capable of biometric fingerprint and GPS-fenced parade attendance punching during remote field camps.</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-purple">Phase 3</span></td>
+      <td>Blockchain-Backed Credentials</td>
+      <td>Mint official <em>'A'</em>, <em>'B'</em>, and <em>'C'</em> Certificate awards as tamper-proof Soulbound Tokens (SBTs) on Polygon / Ethereum, integrating with DigiLocker.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ========================================================================= -->
+<!-- 14. CONCLUSION                                                            -->
+<!-- ========================================================================= -->
+<div class="section-break"></div>
+<h1 class="section-title"><span class="section-num">14</span> Conclusion</h1>
+<p>
+  The <strong>NCC Digital Cadet System</strong> represents a substantial technical leap forward from traditional paper-bound paramilitary youth administration. By fusing modern reactive frontend paradigms (React 19, Vite, Recharts) with a robust Express API service and multi-stage container deployment, the platform delivers an operational ready-to-deploy prototype.
+</p>
+<p>
+  Its flagship innovations—specifically the <strong>Transparent Cadet Readiness Engine</strong>, the <strong>Automated Topic-Wise Examination Generator</strong>, and the <strong>Public Cryptographic QR Certificate Verification System</strong>—directly address critical institutional vulnerabilities around training visibility, examination readiness, and credential fraud. With clear pathways identified for enterprise database persistence and national server synchronization, this system establishes a benchmark for defense youth governance in India.
+</p>
+
+<!-- ========================================================================= -->
+<!-- 15. TECHNOLOGY STACK SUMMARY TABLE                                        -->
+<!-- ========================================================================= -->
+<h1 class="section-title"><span class="section-num">15</span> Technology Stack Summary Table</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 20%;">Category</th>
+      <th style="width: 25%;">Technology Used</th>
+      <th style="width: 15%;">Version</th>
+      <th>Primary Purpose & Scope</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Frontend Core</strong></td>
+      <td>React</td>
+      <td><code>^19.2.8</code></td>
+      <td>Declarative component architecture & reactive UI state</td>
+    </tr>
+    <tr>
+      <td><strong>Build Tool</strong></td>
+      <td>Vite</td>
+      <td><code>^8.2.2</code></td>
+      <td>HMR development server and Rollup production bundler</td>
+    </tr>
+    <tr>
+      <td><strong>Routing</strong></td>
+      <td>React Router DOM</td>
+      <td><code>^7.18.3</code></td>
+      <td>Client-side routing, protected auth routes & layouts</td>
+    </tr>
+    <tr>
+      <td><strong>Iconography</strong></td>
+      <td>Lucide React</td>
+      <td><code>^1.39.0</code></td>
+      <td>Vector SVG icon set for navigation and status indicators</td>
+    </tr>
+    <tr>
+      <td><strong>Data Visualization</strong></td>
+      <td>Recharts</td>
+      <td><code>^3.10.1</code></td>
+      <td>Attendance radial bars, score bar charts & trend lines</td>
+    </tr>
+    <tr>
+      <td><strong>QR Generation</strong></td>
+      <td>QRCode.react</td>
+      <td><code>^4.2.0</code></td>
+      <td>Dynamic SVG QR codes for cadet ID and certificates</td>
+    </tr>
+    <tr>
+      <td><strong>PDF Parsing</strong></td>
+      <td>pdfjs-dist</td>
+      <td><code>^6.3.289</code></td>
+      <td>Client-side extraction of text from training PDFs</td>
+    </tr>
+    <tr>
+      <td><strong>Backend Runtime</strong></td>
+      <td>Node.js</td>
+      <td><code>v24.19.0 / v20</code></td>
+      <td>Asynchronous JavaScript runtime engine</td>
+    </tr>
+    <tr>
+      <td><strong>Backend Framework</strong></td>
+      <td>Express.js</td>
+      <td><code>^4.21.2</code></td>
+      <td>HTTP web server, routing, and static file delivery</td>
+    </tr>
+    <tr>
+      <td><strong>Security / Auth</strong></td>
+      <td>jsonwebtoken</td>
+      <td><code>^9.0.2</code></td>
+      <td>HMAC-SHA256 signed stateless authorization tokens</td>
+    </tr>
+    <tr>
+      <td><strong>Cryptography</strong></td>
+      <td>bcryptjs</td>
+      <td><code>^2.4.3</code></td>
+      <td>One-way salted password hashing</td>
+    </tr>
+    <tr>
+      <td><strong>CORS</strong></td>
+      <td>cors</td>
+      <td><code>^2.8.5</code></td>
+      <td>Cross-origin request authorization handling</td>
+    </tr>
+    <tr>
+      <td><strong>Environment</strong></td>
+      <td>dotenv</td>
+      <td><code>^16.4.7</code></td>
+      <td>Secure environment variable parsing from .env files</td>
+    </tr>
+    <tr>
+      <td><strong>Containerization</strong></td>
+      <td>Docker</td>
+      <td>Multi-stage</td>
+      <td>Unified Alpine Linux container for frontend and backend</td>
+    </tr>
+    <tr>
+      <td><strong>Hosting Target</strong></td>
+      <td>Google Cloud Run / Render</td>
+      <td>Managed</td>
+      <td>Auto-scaling production serverless deployment</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
